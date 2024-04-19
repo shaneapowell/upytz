@@ -31,7 +31,8 @@ The **utztime** library is made up of 4 primary parts.
 - A **utzlist** Object with some pre-defined American TimeZone definitions.
 
 # Limitation
-- Epoch!  This library relies on the system `time` library.  Due to that fact, calculating timezone specific values before teh system Epoch (2000 for upy, 1970 for unix) fails.
+- Epoch!  This library relies on the system `time` library.  Due to that fact, calculating timezone specific values before teh system Epoch (2000 for upy, 1970 for unix) fails. If you are having calculation and generation issues around jan 2000, that'll be the reason.
+- Year.  These 32 bit devices can't calculate the `time` value for years above somewhere around 2060.
 
 # Installation
 ## MIP

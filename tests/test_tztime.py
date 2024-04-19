@@ -157,15 +157,385 @@ class test_tz_time(unittest.TestCase):
         assert t3 == t3
 
 
-    # def test_plus_seconds(self):
+    def test_pre_epoch_time(self):
 
-    #     assert False
+        # Then
+        with self.assertRaises(Exception):
+            # When
+            TZTime.create(1931, 2, 3, 4, 5, 6)
 
 
-    # def test_minus_seconds(self):
+    def test_plus_seconds(self):
 
-    #     assert False
+        # Given
+        t1 = TZTime.create(2001, 2, 3, 4, 5, 5, America_Los_Angeles)
 
-    # def test_with_seconds(self):
+        # When
+        t2 = t1.plusSeconds(70)
 
-    #     assert False
+        # Then
+        assert t2.year() == 2001
+        assert t2.month() == 2
+        assert t2.day() == 3
+        assert t2.hour() == 4
+        assert t2.minute() == 6
+        assert t2.second() == 15
+
+
+    def test_minus_seconds(self):
+
+        # Given
+        t1 = TZTime.create(2001, 2, 3, 4, 5, 5, America_Los_Angeles)
+
+        # When
+        t2 = t1.plusSeconds(-70)
+
+        # Then
+        assert t2.year() == 2001
+        assert t2.month() == 2
+        assert t2.day() == 3
+        assert t2.hour() == 4
+        assert t2.minute() == 3
+        assert t2.second() == 55
+
+
+    def test_plus_minutes(self):
+
+        # Given
+        t1 = TZTime.create(2001, 2, 3, 4, 5, 5, America_Los_Angeles)
+
+        # When
+        t2 = t1.plusMinutes(70)
+
+        # Then
+        assert t2.year() == 2001
+        assert t2.month() == 2
+        assert t2.day() == 3
+        assert t2.hour() == 5
+        assert t2.minute() == 15
+        assert t2.second() == 5
+
+
+    def test_minus_minutes(self):
+
+        # Given
+        t1 = TZTime.create(2001, 2, 3, 4, 5, 5, America_Los_Angeles)
+
+        # When
+        t2 = t1.plusMinutes(-70)
+
+        # Then
+        assert t2.year() == 2001
+        assert t2.month() == 2
+        assert t2.day() == 3
+        assert t2.hour() == 2
+        assert t2.minute() == 55
+        assert t2.second() == 5
+
+    def test_plus_hours(self):
+
+        # Given
+        t1 = TZTime.create(2001, 2, 3, 4, 5, 5, America_Los_Angeles)
+
+        # When
+        t2 = t1.plusHours(70)
+
+        # Then
+        assert t2.year() == 2001
+        assert t2.month() == 2
+        assert t2.day() == 6
+        assert t2.hour() == 2
+        assert t2.minute() == 5
+        assert t2.second() == 5
+
+
+    def test_minus_hours(self):
+
+        # Given
+        t1 = TZTime.create(2001, 2, 3, 4, 5, 5, America_Los_Angeles)
+
+        # When
+        t2 = t1.plusHours(-70)
+
+        # Then
+        assert t2.year() == 2001
+        assert t2.month() == 1
+        assert t2.day() == 31
+        assert t2.hour() == 6
+        assert t2.minute() == 5
+        assert t2.second() == 5
+
+
+    def test_plus_days(self):
+
+        # Given
+        t1 = TZTime.create(2001, 2, 3, 4, 5, 5, America_Los_Angeles)
+
+        # When
+        t2 = t1.plusDays(70)
+
+        # Then
+        assert t2.year() == 2001
+        assert t2.month() == 4
+        assert t2.day() == 14
+        assert t2.hour() == 4
+        assert t2.minute() == 5
+        assert t2.second() == 5
+
+
+    def test_minus_days(self):
+
+        # Given
+        t1 = TZTime.create(2001, 2, 3, 4, 5, 5, America_Los_Angeles)
+
+        # When
+        t2 = t1.plusDays(-70)
+
+        # Then
+        assert t2.year() == 2000
+        assert t2.month() == 11
+        assert t2.day() == 25
+        assert t2.hour() == 4
+        assert t2.minute() == 5
+        assert t2.second() == 5
+
+
+    def test_plus_months(self):
+
+        # Given
+        t1 = TZTime.create(2011, 2, 3, 4, 5, 5, America_Los_Angeles)
+
+        # When
+        t2 = t1.plusMonths(70)
+
+        # Then
+        assert t2.year() == 2016
+        assert t2.month() == 12
+        assert t2.day() == 3
+        assert t2.hour() == 4
+        assert t2.minute() == 5
+        assert t2.second() == 5
+
+
+    def test_minus_months(self):
+
+        # Given
+        t1 = TZTime.create(2011, 2, 3, 4, 5, 5, America_Los_Angeles)
+
+        # When
+        t2 = t1.plusMonths(-70)
+
+        # Then
+        assert t2.year() == 2005
+        assert t2.month() == 4
+        assert t2.day() == 3
+        assert t2.hour() == 4
+        assert t2.minute() == 5
+        assert t2.second() == 5
+
+
+    def test_plus_years(self):
+
+        # Given
+        t1 = TZTime.create(2010, 2, 3, 4, 5, 5, America_Los_Angeles)
+
+        # When
+        t2 = t1.plusYears(50)
+
+        # Then
+        assert t2.year() == 2060
+        assert t2.month() == 2
+        assert t2.day() == 3
+        assert t2.hour() == 4
+        assert t2.minute() == 5
+        assert t2.second() == 5
+
+
+    def test_minus_years(self):
+
+        # Given
+        t1 = TZTime.create(2055, 2, 3, 4, 5, 5, America_Los_Angeles)
+
+        # When
+        t2 = t1.plusYears(-20)
+
+        # Then
+        assert t2.year() == 2035
+        assert t2.month() == 2
+        assert t2.day() == 3
+        assert t2.hour() == 4
+        assert t2.minute() == 5
+        assert t2.second() == 5
+
+
+    def test_with_second(self):
+
+        # Given
+        t1 = TZTime.create(2001, 2, 3, 4, 5, 5, America_Los_Angeles)
+
+        # When
+        t2 = t1.withSecond(32)
+        t3 = t1.withSecond(122)
+
+        # Then
+        assert t2.year() == 2001
+        assert t2.month() == 2
+        assert t2.day() == 3
+        assert t2.hour() == 4
+        assert t2.minute() == 5
+        assert t2.second() == 32
+
+        assert t3.year() == 2001
+        assert t3.month() == 2
+        assert t3.day() == 3
+        assert t3.hour() == 4
+        assert t3.minute() == 7
+        assert t3.second() == 2
+
+
+    def test_with_minute(self):
+
+        # Given
+        t1 = TZTime.create(2001, 2, 3, 4, 5, 5, America_Los_Angeles)
+
+        # When
+        t2 = t1.withMinute(32)
+        t3 = t1.withMinute(122)
+
+        # Then
+        assert t2.year() == 2001
+        assert t2.month() == 2
+        assert t2.day() == 3
+        assert t2.hour() == 4
+        assert t2.minute() == 32
+        assert t2.second() == 5
+
+        assert t3.year() == 2001
+        assert t3.month() == 2
+        assert t3.day() == 3
+        assert t3.hour() == 6
+        assert t3.minute() == 2
+        assert t3.second() == 5
+
+
+    def test_with_hour(self):
+
+        # Given
+        t1 = TZTime.create(2001, 2, 3, 4, 5, 5, America_Los_Angeles)
+
+        # When
+        t2 = t1.withHour(22)
+        t3 = t1.withHour(26)
+
+        # Then
+        assert t2.year() == 2001
+        assert t2.month() == 2
+        assert t2.day() == 3
+        assert t2.hour() == 22
+        assert t2.minute() == 5
+        assert t2.second() == 5
+
+        assert t3.year() == 2001
+        assert t3.month() == 2
+        assert t3.day() == 4
+        assert t3.hour() == 2
+        assert t3.minute() == 5
+        assert t3.second() == 5
+
+
+    def test_with_day(self):
+
+        # Given
+        t1 = TZTime.create(2001, 2, 3, 4, 5, 5, America_Los_Angeles)
+
+        # When
+        t2 = t1.withDay(10)
+        t3 = t1.withDay(42)
+
+        # Then
+        assert t2.year() == 2001
+        assert t2.month() == 2
+        assert t2.day() == 10
+        assert t2.hour() == 4
+        assert t2.minute() == 5
+        assert t2.second() == 5
+
+        assert t3.year() == 2001
+        assert t3.month() == 3
+        assert t3.day() == 14
+        assert t3.hour() == 4
+        assert t3.minute() == 5
+        assert t3.second() == 5
+
+
+    def test_with_month(self):
+
+        # Given
+        t1 = TZTime.create(2001, 2, 3, 4, 5, 5, America_Los_Angeles)
+
+        # When
+        t2 = t1.withMonth(10)
+        t3 = t1.withMonth(16)
+
+        # Then
+        assert t2.year() == 2001
+        assert t2.month() == 10
+        assert t2.day() == 3
+        assert t2.hour() == 4
+        assert t2.minute() == 5
+        assert t2.second() == 5
+
+        assert t3.year() == 2002
+        assert t3.month() == 4
+        assert t3.day() == 3
+        assert t3.hour() == 4
+        assert t3.minute() == 5
+        assert t3.second() == 5
+
+
+    def test_with_year(self):
+
+        # Given
+        t1 = TZTime.create(2001, 2, 3, 4, 5, 5, America_Los_Angeles)
+
+        # When
+        t2 = t1.withYear(2011)
+
+        # Then
+        assert t2.year() == 2011
+        assert t2.month() == 2
+        assert t2.day() == 3
+        assert t2.hour() == 4
+        assert t2.minute() == 5
+        assert t2.second() == 5
+
+
+    def test_leap_year(self):
+
+        # When
+        t = TZTime.create(2020, 2, 29, 4, 5, 5, America_Los_Angeles)
+
+        # Then
+        assert t.year() == 2020
+        assert t.month() == 2
+        assert t.day() == 29
+        assert t.hour() == 4
+        assert t.minute() == 5
+        assert t.second() == 5
+
+
+    def test_leap_year_plus(self):
+
+        # Given
+        t1 = TZTime.create(2020, 2, 28, 4, 5, 5, America_Los_Angeles)
+
+        # When
+        t2 = t1.plusDays(2)
+
+        # Then
+        assert t2.year() == 2020
+        assert t2.month() == 3
+        assert t2.day() == 1
+        assert t2.hour() == 4
+        assert t2.minute() == 5
+        assert t2.second() == 5

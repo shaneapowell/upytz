@@ -30,7 +30,7 @@ def mathFuture():
 def zero():
 
     cstNow = utztime.TZTime(tz=America_Chicago)
-    cstZero = cstNow.withMinuts(0).withSeconds(0)
+    cstZero = cstNow.withMinute(0).withSecond(0)
 
     print(f"[{cstNow}] with zero minutes/seconds [{cstZero}]")
 

@@ -3,8 +3,7 @@ import time
 from . import utimezone
 
 _isupy = True if sys.implementation.name == "micropython" else False
-
-WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thr', 'Fri', 'Sat']
+_EPOCH_YEAR = time.gmtime(0)[0]
 
 
 def _mktime(year: int, month: int, day: int, hour: int, min: int, sec: int) -> int:
@@ -27,7 +26,6 @@ def _mktime(year: int, month: int, day: int, hour: int, min: int, sec: int) -> i
         return int(time.mktime((year, month, day, hour, min, sec, None, None)))  # type: ignore [arg-type]
     else:
         return int(time.mktime((year, month, day, hour, min, sec, -1, -1, -1)))
-
 
 
 class TZTime:
@@ -87,6 +85,7 @@ class TZTime:
 
         sec: 0-61
         """
+        assert year >= _EPOCH_YEAR, f"Unfortunately, upy has a Jan 1 {_EPOCH_YEAR} Epoch limitation.  Can not create a time with year={year}"
         t = _mktime(year=year, month=month, day=day, hour=hour, min=min, sec=sec)
         return TZTime(t, tz)
 
@@ -335,21 +334,57 @@ class TZTime:
         return TZTime(nt, self._tz)
 
 
-    def withMinuts(self, minutes: int) -> 'TZTime':
+    def withYear(self, year: int) -> 'TZTime':
         """
-        Set the minutes value
+        Set the year value
         """
         gm = self._gmtime()
-        nt = _mktime(gm[0], gm[1], gm[2], gm[3], minutes, gm[5])
+        nt = _mktime(year, gm[1], gm[2], gm[3], gm[4], gm[5])
         return TZTime(nt, self._tz)
 
 
-    def withSeconds(self, seconds: int) -> 'TZTime':
+    def withMonth(self, month: int) -> 'TZTime':
         """
-        Set the seconds value
+        Set the month value, can be more than 12, and less than 0, will adjust the year
         """
         gm = self._gmtime()
-        nt = _mktime(gm[0], gm[1], gm[2], gm[3], gm[4], seconds)
+        nt = _mktime(gm[0], month, gm[2], gm[3], gm[4], gm[5])
+        return TZTime(nt, self._tz)
+
+
+    def withDay(self, day: int) -> 'TZTime':
+        """
+        Set the Day value. Can be more than 31, and less than 0, will adjust the months.
+        """
+        gm = self._gmtime()
+        nt = _mktime(gm[0], gm[1], day, gm[3], gm[4], gm[5])
+        return TZTime(nt, self._tz)
+
+
+    def withHour(self, hour: int) -> 'TZTime':
+        """
+        Set the hours value.  Can be more than 24 and less than 0, will adjust the days.
+        """
+        gm = self._gmtime()
+        nt = _mktime(gm[0], gm[1], gm[2], hour, gm[4], gm[5])
+        return TZTime(nt, self._tz)
+
+
+    def withMinute(self, minute: int) -> 'TZTime':
+        """
+        Set the minutes value. Can be more than 60 and less than 0, will adjust the hours.
+        """
+        gm = self._gmtime()
+        nt = _mktime(gm[0], gm[1], gm[2], gm[3], minute, gm[5])
+        return TZTime(nt, self._tz)
+
+
+    def withSecond(self, second: int) -> 'TZTime':
+        """
+        Set the seconds value. Can be more than 60 and less than 0, will adjust the minutes.
+        """
+        gm = self._gmtime()
+        nt = _mktime(gm[0], gm[1], gm[2], gm[3], gm[4], second)
         return TZTime(nt, self._tz)
 
 
