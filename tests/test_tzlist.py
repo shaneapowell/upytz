@@ -2,13 +2,23 @@ import utztime.utzlist as tzl
 from utztime import utimezone
 from utztime.utimezone import TimeChangeRule, Timezone
 import unittest
+from utztime.tz.us import America_New_York
+from utztime.tz.us import America_Chicago
+from utztime.tz.us import America_Phoenix
+from utztime.tz.us import America_Los_Angeles
 
 
-class TestTZList(unittest.TestCase):
+class test_tzlist(unittest.TestCase):
 
 
     def setUp(self):
-        tzl._setDefaultTimezones()
+
+        tzl.clear()
+        tzl.registerTimezone(America_New_York)
+        tzl.registerTimezone(America_Chicago)
+        tzl.registerTimezone(America_Los_Angeles)
+        tzl.registerTimezone(America_Phoenix)
+
 
 
     def test_find_timezone(self):
@@ -56,11 +66,11 @@ class TestTZList(unittest.TestCase):
         edt = TimeChangeRule("EDT", utimezone.SECOND, utimezone.SUN, utimezone.MAR, 2, -240)
         est = TimeChangeRule("EST", utimezone.FIRST, utimezone.SUN, utimezone.NOV, 2, -300)
         name = "Australia/Sydney"
-        tz = Timezone(est, edt, name)
+        tz = Timezone(name=name, std=est, dst=edt)
         preListSize = len(tzl.getTimezones())
 
         # When
-        tzl.setTimezone(tz)
+        tzl.registerTimezone(tz)
 
         # Then
         assert len(tzl.getTimezones()) == (preListSize + 1)
@@ -74,11 +84,11 @@ class TestTZList(unittest.TestCase):
         edt = TimeChangeRule("EDT", utimezone.SECOND, utimezone.SUN, utimezone.MAR, 2, -240)
         est = TimeChangeRule("EST", utimezone.FIRST, utimezone.SUN, utimezone.NOV, 2, -300)
         name = "America/Phoenix"
-        tz = Timezone(est, edt, name)
+        tz = Timezone(name=name, std=est, dst=edt)
         preListSize = len(tzl.getTimezones())
 
         # When
-        tzl.setTimezone(tz)
+        tzl.registerTimezone(tz)
         newTZ = tzl.getTimezone(name)
 
         # Then
@@ -112,10 +122,10 @@ class TestTZList(unittest.TestCase):
         edt = TimeChangeRule("AEDT", utimezone.SECOND, utimezone.SUN, utimezone.MAR, 2, (60 * 11))
         est = TimeChangeRule("AEST", utimezone.FIRST, utimezone.SUN, utimezone.NOV, 2, (60 * 10))
         name = "Australia/Sydney"
-        tz = Timezone(est, edt, name)
+        tz = Timezone(name=name, std=est, dst=edt)
 
         # When
-        tzl.setTimezone(tz)
+        tzl.registerTimezone(tz)
         lst = tzl.getTimezones()
 
         # Then

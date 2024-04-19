@@ -1,4 +1,3 @@
-# Check Back Soon.  Fixing a serious math bug in the TZ rules.
 
 # Micropython uTime/TimeZone Library
 [![tests](https://github.com/shaneapowell/utimezone/actions/workflows/tests.yml/badge.svg)](https://github.com/shaneapowell/utimezone/actions/workflows/tests.yml)
@@ -30,6 +29,9 @@ The **utztime** library is made up of 4 primary parts.
 - A **Timezone** object uses **TimeChangeRule**s to perform conversions and related functions.
 - A **TZTime** Object to handle and manipulate time, avoiding the direct use of the standard `time` lib.
 - A **utzlist** Object with some pre-defined American TimeZone definitions.
+
+# Limitation
+- Epoch!  This library relies on the system `time` library.  Due to that fact, calculating timezone specific values before teh system Epoch (2000 for upy, 1970 for unix) fails.
 
 # Installation
 ## MIP
@@ -94,4 +96,60 @@ pipenv run utests /dev/ttyACM0
 You'll need the `micropython` binary installed on your system.
 ```sh
 pipenv run etests
+```
+
+# Adding New TimeZones to this Library.
+I'm more than happy to accept PullRequests to add new TimeZone definitions.
+I'm Canadian Born, living in USA. So it's no surprise I started with the time zones I'm familiar with.
+Just follow these guidelines in creating a new TimeZone definition.
+
+Reference the standard TimeZone identifier names to figure out what directory, and filename(s) you'll be creating.
+[https://en.wikipedia.org/wiki/List_of_tz_database_time_zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
+
+TimeZones in this library are grouped by country.  They are stored in a single file per country, using the country code abbreviation.
+Look in `/src/utztime/tz` for the current definition files.  `us.py` contains all USA timezone definitions.  `ca.py` for all Canadian definitions.
+The reason for keeping the definitions within separate country code files, is to streamline the memory overhead.  Instead of having your program import
+every possible definition, which will use up a good deal of memory, you can reference them in smaller chunks.
+
+In an effort to streamline memory constraints even more, there is the concept of linking a timezone to an existing full definition.
+This saves on a small amount of ram, by re-using the existing rule definition in the original timezone, and only really adding a name string.
+see `/src/utztime/tz/ca.py` for some examples of this.
+
+To create a brand new definition file, please reference `us.py` as an example of how to structure your new file.
+Defining a list of any new `Rules` at the top, then each `Timezone` definition referencing these rules.  Then any `linked` timezones.
+
+Be careful overusing existing rules and zones in linked zones.  This can lead to a cascading increase in the used memory footprint.
+The `ca.py` file references the `us.py` file for most of it's zones, as all but 2 are linked.  This is not too inefficient.
+However, the `bm.py` file references the `ca.py`, which itself references the `us.py` file, just for a single pair of `rules`.  This can be risky if not careful.
+
+Finally, create a unit-test for the new zone file, or add to the existing one.
+You only need to test zones that are not canonical zones (not linked).
+see `/tests/test_tz_us.py` and `/tests/test_tz_ca.py` for examples. There is a basic utility test function created that does the
+rudimentary testing needed for each defined zone.
+
+If you have created a new `test_tz_XX.py` file, you must also add it's include to the `/test/__init__.py` file
+
+
+# Before Submitting a PR
+```sh
+# Run the linter and typechecker
+pipenv run linter
+pipenv run typechecker
+
+# Build the .mpy files
+pipenv run build
+
+# Run the tests locally. Take note of the number of tests run.  eg.. 50
+pipenv run tests
+
+# Run the tests in a local micropython emulator.  Make sure the same number of tests ran as above.
+# If the count is off, you might have forgot to add your new test.py file to the `/test/__init__.py` file
+pipenv run etests
+
+# Run the tests on a device.
+# This could prove challenging on smaller upy devices.
+# I happen to have some Xaio esp32S3 devices with 8M of psram on board.
+# If this becomes an issue, I'll figure out a simple way to break the tests into segments.
+pipenv run deploy /dev/ttyACM0
+pipenv run utests /dev/ttyACM0
 ```

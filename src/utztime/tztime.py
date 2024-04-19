@@ -2,22 +2,32 @@ import sys
 import time
 from . import utimezone
 
-_utime = True if sys.implementation.name == "micropython" else False
+_isupy = True if sys.implementation.name == "micropython" else False
 
 WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thr', 'Fri', 'Sat']
 
 
 def _mktime(year: int, month: int, day: int, hour: int, min: int, sec: int) -> int:
     """
+    Reference: https://www.geeksforgeeks.org/python-time-mktime-method/
+
     Don't use this directly. Provided for use within this class.
     A platform safe mktime, since unix and upython have slightly different versions
     upython the tuple is (y,m,d,h,m,s,wk,yd)
     Unix python the tuple is (y,m,d,h,m,s,wk,yd,dst)
+    month: 1-12
+    day: 1-31
+    hour:0-23
+    minute:0-59
+    sec: 0-61
+    dow: 0-6. Monday == 0
+    yd: 1-366
     """
-    if _utime:
+    if _isupy:
         return int(time.mktime((year, month, day, hour, min, sec, None, None)))  # type: ignore [arg-type]
     else:
         return int(time.mktime((year, month, day, hour, min, sec, -1, -1, -1)))
+
 
 
 class TZTime:
@@ -66,9 +76,36 @@ class TZTime:
     def create(year: int = 0, month: int = 0, day: int = 0, hour: int = 0, min: int = 0, sec: int = 0, tz: utimezone.Timezone | None = None) -> 'TZTime':
         """
         Create a new instance with the given time values, and specific timezone. A None tz is treated like Zulu/UTC
+
+        month: 1-12
+
+        day: 1-31
+
+        hour: 0-23
+
+        min: 0-59
+
+        sec: 0-61
         """
-        t = _mktime(year, month, day, hour, min, sec)
+        t = _mktime(year=year, month=month, day=day, hour=hour, min=min, sec=sec)
         return TZTime(t, tz)
+
+
+    def isDST(self) -> bool:
+        """
+        Return if this time, and the given timezone, is a DST time or not.
+        """
+        if self._tz is None:
+            return False
+        else:
+            return self._tz.locIsDST(self._time)
+
+
+    def isSTD(self) -> bool:
+        """
+        Returns if this time, and the given timezone, is a STD time or not.
+        """
+        return not self.isDST()
 
 
     def __str__(self) -> str:
@@ -140,6 +177,8 @@ class TZTime:
     def _gmtime(self) -> tuple:
         """
         Return the the underlying structured time tuple.
+        We fetch the localtime, because on micropython, this is always the same as gmtime due to the lack of tz capacity.
+        On unix python, gmtime converts for us, and we dont' want that.  So, localtime it is.
         """
         if self._stime is None:
             self._stime = time.localtime(self._time)
@@ -209,7 +248,7 @@ class TZTime:
         return self._tz
 
 
-    def toTimezone(self, tz: utimezone.Timezone) -> 'TZTime':
+    def toTimezone(self, tz: utimezone.Timezone | None) -> 'TZTime':
         """
         Convert this time, to the new timezone.
         If the new TZ is None, this is converted to UTC.
