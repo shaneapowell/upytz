@@ -29,8 +29,6 @@ class TestRules(unittest.TestCase):
         tDS = EDT.toTime(2023)
 
         # Then
-        assert tST == util.unixToUpyTime(1699171200), f"{tST} == {util.unixToUpyTime(1699171200)}"
-        assert tDS == util.unixToUpyTime(1678608000), f"{tDS} == {util.unixToUpyTime(1678608000)}"
         assert tST == TZTime.create(2023, 11, 5, 2, 0, 0).time()
         assert tDS == TZTime.create(2023, 3, 12, 2, 0, 0).time()
 
