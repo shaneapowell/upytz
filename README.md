@@ -9,16 +9,6 @@ A fork/port of (and more)
 https://github.com/JChristensen/Timezone
 
 
-# License
-Micropython Timezone Library Copyright (C) 2022 Shane Powell GNU GPL v3.0
-
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License v3.0 as published by the Free Software Foundation.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program. If not, see <https://www.gnu.org/licenses/gpl.html>
-
 # Introduction
 The **utztime** library is designed to work in conjunction with the [python time or utime package], which must also be installed on your system. This documentation assumes some familiarity with the time library.
 
@@ -33,6 +23,10 @@ The **utztime** library is made up of 4 primary parts.
 # Limitation
 - Epoch!  This library relies on the system `time` library.  Due to that fact, calculating timezone specific values before teh system Epoch (2000 for upy, 1970 for unix) fails. If you are having calculation and generation issues around jan 2000, that'll be the reason.
 - Year.  These 32 bit devices can't calculate the `time` value for years above somewhere around 2060.
+
+# Tested On
+- SEEED Xaio ESP32-S3
+- SEEED Xaio ESP32-C3
 
 # Installation
 ## MIP
