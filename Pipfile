@@ -39,6 +39,7 @@ etests = "micropython tools/run_tests_on_emulator.py"
 
 # On Device Run the example
 example = "mpremote run examples/example_tztime.py"
+example2 = "mpremote run examples/example_test.py"
 
 
 # Docs

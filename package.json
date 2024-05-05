@@ -1,8 +1,12 @@
 {
     "urls": [
-        ["utztime/utimezone.py", "github:shaneapowell/utimezone/dist/utztime/utimezone.mpy"],
-        ["utztime/utzlist.py", "github:shaneapowell/utimezone/dist/utztime/utzlist.mpy"],
-        ["utztime/__init__.py", "github:shaneapowell/utimezone/dist/utztime/__init__.mpy"]
+        ["utztime/utimezone.mpy", "github:shaneapowell/utimezone/dist/utztime/utimezone.mpy"],
+        ["utztime/utzlist.mpy", "github:shaneapowell/utimezone/dist/utztime/utzlist.mpy"],
+        ["utztime/__init__.mpy", "github:shaneapowell/utimezone/dist/utztime/__init__.mpy"],
+        ["utztime/tz/__init__.mpy", "github:shaneapowell/utimezone/dist/utztime/tz/__init__.mpy"],
+        ["utztime/tz/bm.mpy", "github:shaneapowell/utimezone/dist/utztime/tz/bm.mpy"],
+        ["utztime/tz/ca.mpy", "github:shaneapowell/utimezone/dist/utztime/tz/ca.mpy"],
+        ["utztime/tz/us.mpy", "github:shaneapowell/utimezone/dist/utztime/tz/us.mpy"],
     ],
     "deps": [
     ],
