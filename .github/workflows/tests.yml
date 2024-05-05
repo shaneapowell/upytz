@@ -14,10 +14,11 @@ jobs:
     strategy:
       matrix:
         # Windows currently fails on 'tests' with module-not-found errors
+        # Now macos is failing on mpy-cross package install.
         # Python 3.8 and 3.9 dont' support union type hintss
         #  os: [ubuntu-latest, macos-latest, windows-latest]
         #  python: ['3.8', '3.9', '3.10', '3.11', '3.12']
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
         python: ['3.10', '3.11', '3.12']
       fail-fast: false
     runs-on: ${{ matrix.os }}
