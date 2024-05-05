@@ -1,5 +1,6 @@
 {
     "urls": [
+        ["utztime/tztime.mpy", "github:shaneapowell/utimezone/dist/utztime/tztime.mpy"],
         ["utztime/utimezone.mpy", "github:shaneapowell/utimezone/dist/utztime/utimezone.mpy"],
         ["utztime/utzlist.mpy", "github:shaneapowell/utimezone/dist/utztime/utzlist.mpy"],
         ["utztime/__init__.mpy", "github:shaneapowell/utimezone/dist/utztime/__init__.mpy"],
