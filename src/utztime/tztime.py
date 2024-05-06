@@ -30,10 +30,11 @@ def _mktime(year: int, month: int, day: int, hour: int, min: int, sec: int) -> i
     dow: 0-6. Monday == 0
     yd: 1-366
     """
+    year = max(year, _EPOCH_YEAR)
     if _isupy:
-        return int(time.mktime((year, month, day, hour, min, sec, None, None)))  # type: ignore [arg-type]
+        return max(0, int(time.mktime((year, month, day, hour, min, sec, None, None))))  # type: ignore [arg-type]
     else:
-        return int(time.mktime((year, month, day, hour, min, sec, -1, -1, -1)))
+        return max(0, int(time.mktime((year, month, day, hour, min, sec, -1, -1, -1))))
 
 
 class TZTime:

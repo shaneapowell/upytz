@@ -1,4 +1,4 @@
-from utztime import TZTime
+from utztime import TZTime, EPOCH
 import unittest
 import time
 from utztime.tz.us import America_New_York
@@ -163,6 +163,18 @@ class test_tz_time(unittest.TestCase):
         with self.assertRaises(Exception):
             # When
             TZTime.create(1931, 2, 3, 4, 5, 6)
+
+
+    def test_toLocal_near_epoch_doesnt_fail(self):
+
+        # Given
+        t1 = EPOCH.plusHours(1).toTimezone(America_Los_Angeles)
+
+        # When
+        tISO = t1.toISO8601()
+
+        # Then
+        assert "1999-12-31" in tISO
 
 
     def test_plus_seconds(self):
