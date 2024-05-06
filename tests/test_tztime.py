@@ -174,7 +174,7 @@ class test_tz_time(unittest.TestCase):
         tISO = t1.toISO8601()
 
         # Then
-        assert "1999-12-31" in tISO
+        assert f"{EPOCH.year()-1}-12-31" in tISO
 
 
     def test_plus_seconds(self):
