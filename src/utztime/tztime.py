@@ -22,13 +22,14 @@ def _mktime(year: int, month: int, day: int, hour: int, min: int, sec: int) -> i
     A platform safe mktime, since unix and upython have slightly different versions
     upython the tuple is (y,m,d,h,m,s,wk,yd)
     Unix python the tuple is (y,m,d,h,m,s,wk,yd,dst)
-    month: 1-12
-    day: 1-31
-    hour:0-23
-    minute:0-59
-    sec: 0-61
-    dow: 0-6. Monday == 0
-    yd: 1-366
+    0: year: 2000-2060+-?
+    1: month: 1-12
+    2: day: 1-31
+    3: hour:0-23
+    4: minute:0-59
+    5: sec: 0-61
+    6: dow: 0-6. Monday == 0
+    7: yd: 1-366
     """
     year = max(year, _EPOCH_YEAR)
     if _isupy:
@@ -240,6 +241,13 @@ class TZTime:
         Get the second of the minute [0-59] (actually 0-61 if you account for leap-seconds and the like)
         """
         return self._gmtime()[5]
+
+
+    def dayOfWeek(self) -> int:
+        """
+        Get the day of week. 0-6. Mon - Sun)
+        """
+        return self._gmtime()[6]
 
 
     def time(self) -> int:

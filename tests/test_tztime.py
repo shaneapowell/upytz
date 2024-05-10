@@ -33,6 +33,7 @@ class test_tz_time(unittest.TestCase):
         assert t.hour() == 4
         assert t.minute() == 5
         assert t.second() == 6
+        assert t.dayOfWeek() == 5
         assert t.tz() is None
 
 
@@ -48,6 +49,7 @@ class test_tz_time(unittest.TestCase):
         assert t.hour() == 4
         assert t.minute() == 5
         assert t.second() == 6
+        assert t.dayOfWeek() == 5
         assert t.tz() == America_New_York
 
 
