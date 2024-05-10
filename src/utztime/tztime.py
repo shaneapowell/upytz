@@ -197,8 +197,30 @@ class TZTime:
     def toISO8601(self) -> str:
         """
         Generate a ISO8601 formatted string.
+        Use the tz as the Zone designator.  None for Zulu or Local.
+        The tz does not convert the time, it adds the correct offset value
+        used at the end.
         """
-        return toISO8601(self._time, self._tz)
+
+        tz = self.tz()
+        if tz is not None:
+            offset = 0
+            if tz.locIsDST(self._time):
+                offset = tz._dst.offset
+            else:
+                offset = tz._std.offset
+
+            offsetHours = int(offset / 60)
+            offsetMinutes = int(offset % 60)
+            offsetDir = "+" if offsetHours > 0 else "-"
+            offsetHours = abs(offsetHours)
+            tzstr = f"{offsetDir}{offsetHours:02d}:{offsetMinutes:02d}"
+        else:
+            tzstr = "Z"
+
+        iso = f"{self.year():04d}-{self.month():02d}-{self.day():02d}T{self.hour():02d}:{self.minute():02d}:{self.second():02d}{tzstr}"
+        return iso
+
 
 
     def year(self) -> int:
@@ -411,35 +433,3 @@ class TZTime:
         You can also clear the timezone to UTC by passing None.
         """
         return TZTime(self._time, tz)
-
-
-def toISO8601(t: int, tz: utimezone.Timezone | None = None) -> str:
-    """
-    Take the unix time t, and convert it into an ISO8601 string.
-    Use the tz as the Zone designator.  None for Zulu or Local.
-    The tz does not convert the time, it adds the correct offset value
-    used at the end.
-    """
-
-    assert t is not None, "t can't be None"
-    assert isinstance(t, int), f"t must be an int. Received [{t.__class__}]"
-
-    if tz is not None:
-        assert isinstance(tz, utimezone.Timezone), f"TZ must be None for Zulu, or a utimezone.Timezone instance. Got [{tz.__class__}]"
-        offset = 0
-        if tz.locIsDST(t):
-            offset = tz._dst.offset
-        else:
-            offset = tz._std.offset
-
-        offsetHours = int(offset / 60)
-        offsetMinutes = int(offset % 60)
-        offsetDir = "+" if offsetHours > 0 else "-"
-        offsetHours = abs(offsetHours)
-        tzstr = f"{offsetDir}{offsetHours:02d}:{offsetMinutes:02d}"
-    else:
-        tzstr = "Z"
-
-    g = time.gmtime(t)
-    iso = f"{g[0]:04d}-{g[1]:02d}-{g[2]:02d}T{g[3]:02d}:{g[4]:02d}:{g[5]:02d}{tzstr}"
-    return iso

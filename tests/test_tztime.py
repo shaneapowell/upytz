@@ -3,6 +3,8 @@ import unittest
 import time
 from utztime.tz.us import America_New_York
 from utztime.tz.us import America_Los_Angeles
+from utztime.tz.us import America_Chicago
+from utztime.tz.us import America_Anchorage
 
 
 class test_tz_time(unittest.TestCase):
@@ -37,20 +39,29 @@ class test_tz_time(unittest.TestCase):
         assert t.tz() is None
 
 
-    def test_create_specific_EST_time(self):
+    def test_create_specific_TZ_time(self):
 
         # When
-        t = TZTime.create(2001, 2, 3, 4, 5, 6, America_New_York)
+        t = TZTime.create(2022, 1, 7, 5, 0, 0, America_Anchorage)
 
         # Then
-        assert t.year() == 2001
-        assert t.month() == 2
-        assert t.day() == 3
-        assert t.hour() == 4
-        assert t.minute() == 5
-        assert t.second() == 6
-        assert t.dayOfWeek() == 5
-        assert t.tz() == America_New_York
+        assert t.year() == 2022
+        assert t.month() == 1
+        assert t.day() == 7
+        assert t.hour() == 5
+        assert t.minute() == 0
+        assert t.second() == 0
+        assert t.dayOfWeek() == 4
+        assert t.tz() == America_Anchorage
+
+
+    def test_toiso_with_specific_TZ(self):
+
+        # When
+        t = TZTime.create(2022, 1, 7, 5, 0, 0, America_Anchorage)
+
+        # Then
+        assert t.toISO8601() == "2022-01-07T05:00:00-09:00", t.toISO8601()
 
 
     def test_UTC_is_before_EST(self):
@@ -194,6 +205,7 @@ class test_tz_time(unittest.TestCase):
         assert t2.hour() == 4
         assert t2.minute() == 6
         assert t2.second() == 15
+        assert t2.tz() == America_Los_Angeles
 
 
     def test_minus_seconds(self):
@@ -211,6 +223,7 @@ class test_tz_time(unittest.TestCase):
         assert t2.hour() == 4
         assert t2.minute() == 3
         assert t2.second() == 55
+        assert t2.tz() == America_Los_Angeles
 
 
     def test_plus_minutes(self):
@@ -228,6 +241,7 @@ class test_tz_time(unittest.TestCase):
         assert t2.hour() == 5
         assert t2.minute() == 15
         assert t2.second() == 5
+        assert t2.tz() == America_Los_Angeles
 
 
     def test_minus_minutes(self):
@@ -245,6 +259,7 @@ class test_tz_time(unittest.TestCase):
         assert t2.hour() == 2
         assert t2.minute() == 55
         assert t2.second() == 5
+        assert t2.tz() == America_Los_Angeles
 
     def test_plus_hours(self):
 
@@ -261,6 +276,7 @@ class test_tz_time(unittest.TestCase):
         assert t2.hour() == 2
         assert t2.minute() == 5
         assert t2.second() == 5
+        assert t2.tz() == America_Los_Angeles
 
 
     def test_minus_hours(self):
@@ -278,6 +294,7 @@ class test_tz_time(unittest.TestCase):
         assert t2.hour() == 6
         assert t2.minute() == 5
         assert t2.second() == 5
+        assert t2.tz() == America_Los_Angeles
 
 
     def test_plus_days(self):
@@ -295,6 +312,7 @@ class test_tz_time(unittest.TestCase):
         assert t2.hour() == 4
         assert t2.minute() == 5
         assert t2.second() == 5
+        assert t2.tz() == America_Los_Angeles
 
 
     def test_minus_days(self):
@@ -312,6 +330,7 @@ class test_tz_time(unittest.TestCase):
         assert t2.hour() == 4
         assert t2.minute() == 5
         assert t2.second() == 5
+        assert t2.tz() == America_Los_Angeles
 
 
     def test_plus_months(self):
@@ -329,6 +348,7 @@ class test_tz_time(unittest.TestCase):
         assert t2.hour() == 4
         assert t2.minute() == 5
         assert t2.second() == 5
+        assert t2.tz() == America_Los_Angeles
 
 
     def test_minus_months(self):
@@ -346,6 +366,7 @@ class test_tz_time(unittest.TestCase):
         assert t2.hour() == 4
         assert t2.minute() == 5
         assert t2.second() == 5
+        assert t2.tz() == America_Los_Angeles
 
 
     def test_plus_years(self):
@@ -363,6 +384,7 @@ class test_tz_time(unittest.TestCase):
         assert t2.hour() == 4
         assert t2.minute() == 5
         assert t2.second() == 5
+        assert t2.tz() == America_Los_Angeles
 
 
     def test_minus_years(self):
@@ -380,6 +402,7 @@ class test_tz_time(unittest.TestCase):
         assert t2.hour() == 4
         assert t2.minute() == 5
         assert t2.second() == 5
+        assert t2.tz() == America_Los_Angeles
 
 
     def test_with_second(self):
@@ -398,6 +421,7 @@ class test_tz_time(unittest.TestCase):
         assert t2.hour() == 4
         assert t2.minute() == 5
         assert t2.second() == 32
+        assert t2.tz() == America_Los_Angeles
 
         assert t3.year() == 2001
         assert t3.month() == 2
@@ -405,6 +429,7 @@ class test_tz_time(unittest.TestCase):
         assert t3.hour() == 4
         assert t3.minute() == 7
         assert t3.second() == 2
+        assert t3.tz() == America_Los_Angeles
 
 
     def test_with_minute(self):
@@ -423,6 +448,7 @@ class test_tz_time(unittest.TestCase):
         assert t2.hour() == 4
         assert t2.minute() == 32
         assert t2.second() == 5
+        assert t2.tz() == America_Los_Angeles
 
         assert t3.year() == 2001
         assert t3.month() == 2
@@ -430,6 +456,7 @@ class test_tz_time(unittest.TestCase):
         assert t3.hour() == 6
         assert t3.minute() == 2
         assert t3.second() == 5
+        assert t3.tz() == America_Los_Angeles
 
 
     def test_with_hour(self):
@@ -448,6 +475,7 @@ class test_tz_time(unittest.TestCase):
         assert t2.hour() == 22
         assert t2.minute() == 5
         assert t2.second() == 5
+        assert t2.tz() == America_Los_Angeles
 
         assert t3.year() == 2001
         assert t3.month() == 2
@@ -455,6 +483,7 @@ class test_tz_time(unittest.TestCase):
         assert t3.hour() == 2
         assert t3.minute() == 5
         assert t3.second() == 5
+        assert t3.tz() == America_Los_Angeles
 
 
     def test_with_day(self):
@@ -473,6 +502,7 @@ class test_tz_time(unittest.TestCase):
         assert t2.hour() == 4
         assert t2.minute() == 5
         assert t2.second() == 5
+        assert t2.tz() == America_Los_Angeles
 
         assert t3.year() == 2001
         assert t3.month() == 3
@@ -480,6 +510,7 @@ class test_tz_time(unittest.TestCase):
         assert t3.hour() == 4
         assert t3.minute() == 5
         assert t3.second() == 5
+        assert t3.tz() == America_Los_Angeles
 
 
     def test_with_month(self):
@@ -498,6 +529,7 @@ class test_tz_time(unittest.TestCase):
         assert t2.hour() == 4
         assert t2.minute() == 5
         assert t2.second() == 5
+        assert t2.tz() == America_Los_Angeles
 
         assert t3.year() == 2002
         assert t3.month() == 4
@@ -505,6 +537,7 @@ class test_tz_time(unittest.TestCase):
         assert t3.hour() == 4
         assert t3.minute() == 5
         assert t3.second() == 5
+        assert t3.tz() == America_Los_Angeles
 
 
     def test_with_year(self):
@@ -522,6 +555,38 @@ class test_tz_time(unittest.TestCase):
         assert t2.hour() == 4
         assert t2.minute() == 5
         assert t2.second() == 5
+        assert t2.tz() == America_Los_Angeles
+
+
+    def test_with_tz(self):
+
+        # Given
+        t1 = TZTime.create(2001, 2, 3, 4, 5, 5, America_Los_Angeles)
+
+        # When
+        t2 = t1.withTimezone(America_New_York)
+
+        # Then
+        assert t2.year() == 2001
+        assert t2.month() == 2
+        assert t2.day() == 3
+        assert t2.hour() == 4
+        assert t2.minute() == 5
+        assert t2.second() == 5
+        assert t2.tz() == America_New_York
+
+        # Also When
+        t2 = t1.withTimezone(America_Chicago)
+
+        # Then
+        assert t2.year() == 2001
+        assert t2.month() == 2
+        assert t2.day() == 3
+        assert t2.hour() == 4
+        assert t2.minute() == 5
+        assert t2.second() == 5
+        assert t2.tz() == America_Chicago
+
 
 
     def test_leap_year(self):
@@ -536,6 +601,7 @@ class test_tz_time(unittest.TestCase):
         assert t.hour() == 4
         assert t.minute() == 5
         assert t.second() == 5
+        assert t.tz() == America_Los_Angeles
 
 
     def test_leap_year_plus(self):
@@ -553,3 +619,4 @@ class test_tz_time(unittest.TestCase):
         assert t2.hour() == 4
         assert t2.minute() == 5
         assert t2.second() == 5
+        assert t2.tz() == America_Los_Angeles
